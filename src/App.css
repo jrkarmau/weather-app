@@ -1,0 +1,93 @@
+body {
+  background-color: lightblue;
+  font-family: Arial, sans-serif;
+}
+
+.weather-container {
+  max-width: 800px;
+  margin: 50px auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  font-size: 40px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.input-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  width: 80%
+}
+
+button {
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.results {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  align-items: center;
+}
+
+.card {
+  background-color: aliceblue;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  width: 400px;
+  height: 200px;
+  text-align: center;
+}
+
+.card h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.comparison {
+  width: 500px;
+  height: 200px;
+}
+
+.error {
+  width: 100%;
+  border: 2px solid red;
+  background-color: #ffe6e6;
+  color: red;
+  font-size: 14px;
+  border-radius: 5px;
+  text-align: center;
+  margin: 10px auto;
+}
+
+
