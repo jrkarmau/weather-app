@@ -6,7 +6,7 @@ stages:
 
 install_dependencies:
   stage: install
-  image: node:lts-alpine3.21 
+  image: node:latest
   script:
       - npm install 
   cache:
@@ -14,14 +14,14 @@ install_dependencies:
       - node_modules/  
 
 test: 
-    image: node:lts-alpine3.21
+    image: node:latest
     stage: test
     script:
     - echo "Make tests"
 
 build:
   stage: build
-  image: node:lts-alpine3.21
+  image: node:latest
   script:
     - echo "Building ..."
     - npm run build  
