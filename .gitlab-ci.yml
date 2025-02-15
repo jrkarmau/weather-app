@@ -17,10 +17,7 @@ test:
     image: node:lts-alpine3.21
     stage: test
     script:
-    - echo "Make tests: npm test"
-    artifacts:
-    paths:
-      - test-results/
+    - echo "Make tests"
 
 build:
   stage: build
