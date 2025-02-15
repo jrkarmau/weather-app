@@ -1,0 +1,42 @@
+stages:
+  - install
+  - test
+  - build
+  - deploy
+
+install_dependencies:
+  stage: install
+  image: node:lts-alpine3.21 
+  script:
+      - npm install 
+  cache:
+    paths:
+      - node_modules/  
+
+test: 
+    image: node:lts-alpine3.21
+    stage: test
+    script:
+    - echo "Make tests: npm test"
+    artifacts:
+    paths:
+      - test-results/
+
+build:
+  stage: build
+  image: node:lts-alpine3.21
+  script:
+    - echo "Building ..."
+    - npm run build  
+  artifacts:
+    paths:
+      - build/ 
+    expire_in: 1 hour  
+
+deploy:
+  stage: deploy
+  script: 
+    - echo "Deploying to production..."
+  only:
+    - master
+
