@@ -54,6 +54,11 @@ const WeatherApp = () => {
         return ((temp1 + temp2) / 2).toFixed(2);
     }
 
+    // convert wind speed from kilometers per hour to meters per second.
+    const changeWindUnits = (wind) => {
+        return (wind / 3.6).toFixed(2);
+    }
+
     const handleError = () => {
         setError("Unable to fetch weather data.");
         setWeatherData1(null);
@@ -94,8 +99,8 @@ const WeatherApp = () => {
                 {weatherData1 && weatherData2 && (
                     <div className="card comparison">
                         <h2>Comparison for {weatherData2.location.name}, {weatherData2.location.country} </h2>
-                        <p>Temp difference: {calcTempDifference(weatherData1.main.temp, weatherData2.current.temp_c)} °C</p>
                         <p>Temp average: {calcAverageTemp(weatherData1.main.temp, weatherData2.current.temp_c)} °C</p>
+                        <p>Temp difference: {calcTempDifference(weatherData1.main.temp, weatherData2.current.temp_c)} °C</p>
                     </div>
                 )}
                 {weatherData2 && (
@@ -104,7 +109,7 @@ const WeatherApp = () => {
                         <p>{weatherData2.current.condition.text}</p>
                         <p>Temperature: {weatherData2.current.temp_c} °C</p>
                         <p>Feels like: {weatherData2.current.feelslike_c} °C</p>
-                        <p>Wind: {weatherData2.current.wind_kph} km/h</p>
+                        <p>Wind: {changeWindUnits(weatherData2.current.wind_kph)} m/s</p>
                     </div>
                 )}
             </div>
