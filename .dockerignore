@@ -1,0 +1,4 @@
+# Add directories and files not needed for the build here
+node_modules
+README.md
+.git*
