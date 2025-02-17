@@ -1,39 +1,62 @@
 stages:
-  - install
-  - test
   - build
+  - test
   - deploy
 
-install_dependencies:
-  stage: install
-  image: node:latest
-  script:
-      - npm install 
-  cache:
+# Global cache settings for all jobs
+cache:
+  - &global_cache_node_mods
+    key:
+      files:
+        - package-lock.json
     paths:
-      - node_modules/  
+      - node_modules/
+    policy: pull  # Prevent subsequent jobs from modifying cache (only install can update)
 
-test: 
-    image: node:latest
-    stage: test
-    script:
-    - echo "Make tests"
+install:
+  image: node:latest
+  stage: .pre  # Always first, regardless of stage order
+  cache:
+    - <<: *global_cache_node_mods
+      when: on_success
+      policy: pull-push  # Allow only install job to update cache
+    - key: ${CI_JOB_NAME}
+      paths:
+        - .npm/
+      when: on_success
+      policy: pull-push
+  script:
+    - npm ci --cache .npm --prefer-offline #clean install
 
 build:
   stage: build
-  image: node:latest
   script:
-    - echo "Building ..."
-    - npm run build  
+    - npm run build
   artifacts:
     paths:
-      - build/ 
-    expire_in: 1 hour  
+      - dist/
+    expire_in: 1 hour
+
+# Test stage
+# Inherits global cache settings to use node_modules
+# Needs built files from the build stage
+
+test:
+  stage: test
+  needs:
+    - job: build
+      artifacts: true  # Ensure built files are available
+  script:
+    - echo "Running tests"
+    # - npm test
 
 deploy:
   stage: deploy
-  script: 
-    - echo "Deploying to production..."
-  only:
-    - master
-
+  when: on_success  # Run only if previous stages succeed
+  cache: {}  # Override inherited cache settings since node_modules is not needed
+  needs:
+    - job: build
+      artifacts: true  # Ensure built files are available
+  script:
+    - eco "Deploying"
+    # - npm publish
