@@ -27,6 +27,8 @@ install:
       policy: pull-push
   script:
     - npm ci --cache .npm --prefer-offline #clean install
+  tags:
+    - shared-runner
 
 build:
   stage: build
@@ -36,6 +38,8 @@ build:
     paths:
       - dist/
     expire_in: 1 hour
+  tags:
+    - shared-runner
 
 # Test stage
 # Inherits global cache settings to use node_modules
@@ -49,6 +53,8 @@ test:
   script:
     - echo "Running tests"
     # - npm test
+  tags:
+    - shared-runner  
 
 deploy:
   stage: deploy
@@ -58,5 +64,7 @@ deploy:
     - job: build
       artifacts: true  # Ensure built files are available
   script:
-    - eco "Deploying"
+    - echo "Deploying"
     # - npm publish
+  tags:
+    - shared-runner
