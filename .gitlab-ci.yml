@@ -28,7 +28,7 @@ install:
   script:
     - npm ci --cache .npm --prefer-offline #clean install
   tags:
-    - shared-runner
+    - shared
 
 build:
   stage: build
@@ -39,7 +39,7 @@ build:
       - dist/
     expire_in: 1 hour
   tags:
-    - shared-runner
+    - shared
 
 # Test stage
 # Inherits global cache settings to use node_modules
@@ -54,7 +54,7 @@ test:
     - echo "Running tests"
     # - npm test
   tags:
-    - shared-runner  
+    - shared
 
 deploy:
   stage: deploy
@@ -67,4 +67,4 @@ deploy:
     - echo "Deploying"
     # - npm publish
   tags:
-    - shared-runner
+    - shared
