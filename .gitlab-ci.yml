@@ -52,9 +52,9 @@ test:
       artifacts: true  # Ensure built files are available
   script:
     - echo "Running tests"
-    # - npm test
+    - npm test
   tags:
-    - shared-runner  
+    - shared-runner
 
 deploy:
   stage: deploy
