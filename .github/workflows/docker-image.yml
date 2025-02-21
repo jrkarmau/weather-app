@@ -11,6 +11,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
 
     steps:
     - uses: actions/checkout@v4
@@ -18,14 +21,20 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag ghcr.io/jrkarmau/weather-app:latest
 
-    - name: Run Docker container
-      run: |
-        docker run -d -p 3000:3000 \
-          -e REACT_APP_OPENWEATHER_API_KEY=${{ secrets.REACT_APP_OPENWEATHER_API_KEY }} \
-          -e REACT_APP_WEATHERAPI_API_KEY=${{ secrets.REACT_APP_WEATHERAPI_API_KEY }} \
-          ghcr.io/jrkarmau/weather-app:latest
+    - name: Log in to GitHub Container Registry
+      run: echo "${{ secrets.PAT_TOKEN }}" | docker login ghcr.io -u jrkarmau --password-stdin
 
-  tests: 
+    - name: Push the Docker image to GitHub Container Registry
+      run: docker push ghcr.io/jrkarmau/weather-app:latest
+
+#    - name: Run Docker container
+#      run: |
+#        docker run -d -p 3000:3000 \
+#          -e REACT_APP_OPENWEATHER_API_KEY=${{ secrets.REACT_APP_OPENWEATHER_API_KEY }} \
+#          -e REACT_APP_WEATHERAPI_API_KEY=${{ secrets.REACT_APP_WEATHERAPI_API_KEY }} \
+#          ghcr.io/jrkarmau/weather-app:latest
+
+  tests:
 
     needs: build
     runs-on: ubuntu-latest
@@ -42,29 +51,14 @@ jobs:
         npm ci
         npm run build
 
-    - name: Run unit tests #every test.js file
-      run: npm test 
-
-    - name: Install Playwright for E2E tests
-      run: npx playwright install --with-deps
+    - name: Run unit tests
+      run: npm test
 
     - name: Run E2E tests
-      run: echo "running more tests"
-     #  run: npx playwright test tests/e2e.test.js
-
-
-  publish:
-  
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Log in to GitHub Container Registry
-        run: echo "${{ secrets.PAT_TOKEN }}" | docker login ghcr.io -u jrkarmau --password-stdin
-        
-      - name: Push the Docker image to GitHub Container Registry
-        run: docker push ghcr.io/jrkarmau/weather-app:latest
+      uses: cypress-io/github-action@v6
+      with:
+        start: npm start
+        wait-on: 'http://localhost:3000'
+      env:
+        REACT_APP_OPENWEATHER_API_KEY: ${{ secrets.REACT_APP_OPENWEATHER_API_KEY }}
+        REACT_APP_WEATHERAPI_API_KEY: ${{ secrets.REACT_APP_WEATHERAPI_API_KEY }}
