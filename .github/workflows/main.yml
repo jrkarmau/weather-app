@@ -32,6 +32,16 @@ jobs:
     steps: 
     - uses: actions/checkout@v4
 
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20'
+
+    - name: npm ci and build
+      run: |
+        npm ci
+        npm run build
+
     - name: Run unit tests #every test.js file
       run: npm test 
 
