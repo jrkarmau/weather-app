@@ -51,3 +51,20 @@ jobs:
     - name: Run E2E tests
       run: echo "running more tests"
      #  run: npx playwright test tests/e2e.test.js
+
+
+  publish:
+  
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.weather-app }}" | docker login ghcr.io -u ${{ karolinanhub }} --password-stdin
+        
+      - name: Push the Docker image to GitHub Container Registry
+        run: docker push ghcr.io/karolinanhub/weather-app:latest
