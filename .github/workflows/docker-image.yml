@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main", "development" ]
+    branches: [ "main", "development", "feature/*" ]
   pull_request:
     branches: [ "main", "development" ]
 
@@ -23,7 +23,7 @@ jobs:
         docker run -d -p 3000:3000 \
           -e REACT_APP_OPENWEATHER_API_KEY=${{ secrets.REACT_APP_OPENWEATHER_API_KEY }} \
           -e REACT_APP_WEATHERAPI_API_KEY=${{ secrets.REACT_APP_WEATHERAPI_API_KEY }} \
-          weather-app:latest
+          ghcr.io/jrkarmau/weather-app:latest
 
   tests: 
 
