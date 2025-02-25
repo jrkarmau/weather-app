@@ -64,7 +64,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Log in to GitHub Container Registry
-        run: echo "${{ secrets.weather-app }}" | docker login ghcr.io -u ${{ karolinanhub }} --password-stdin
+        run: echo "${{ secrets.PAT_TOKEN }}" | docker login ghcr.io -u ${{ jrkarmau }} --password-stdin
         
       - name: Push the Docker image to GitHub Container Registry
         run: docker push ghcr.io/karolinanhub/weather-app:latest
