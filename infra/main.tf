@@ -1,7 +1,7 @@
 provider "google" {
   project     = var.project_id
   region      = var.region
-  credentials = file("terraform-sa-key.json") # Fetch from secrets in CI pipeline
+  credentials = file(var.gcp_credentials_file) # Fetch from secrets in CI pipeline
 }
 
 data "google_client_config" "default" {}
