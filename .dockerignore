@@ -2,3 +2,6 @@
 node_modules
 README.md
 .git*
+**/setupTests.js
+**/*.test.js
+**/cypress.config.js
