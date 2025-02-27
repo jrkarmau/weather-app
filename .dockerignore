@@ -1,4 +1,4 @@
-# Add directories and files not needed for the build here
+# .dockerignore file for deployment stages
 node_modules
 README.md
 .git*

@@ -1,4 +1,3 @@
-# TODO: Separate stages for development and deployment builds
 FROM node:22.14.0 AS base
 WORKDIR /weather-app
 EXPOSE 3000
