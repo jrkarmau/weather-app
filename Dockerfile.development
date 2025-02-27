@@ -4,6 +4,8 @@ EXPOSE 3000
 
 FROM base AS development
 ENV HOST="0.0.0.0"
+RUN --mount=type=secret,id=REACT_APP_OPENWEATHER_API_KEY,env=REACT_APP_OPENWEATHER_API_KEY \
+    --mount=type=secret,id=REACT_APP_WEATHERAPI_API_KEY,env=REACT_APP_WEATHERAPI_API_KEY
 COPY . .
 RUN npm ci
 CMD ["npm", "run", "start"]

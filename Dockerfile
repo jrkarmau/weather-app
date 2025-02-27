@@ -12,6 +12,8 @@ RUN npm run build
 FROM base AS deployment
 ENV HOST="0.0.0.0" \
     NODE_ENV="production"
+RUN --mount=type=secret,id=REACT_APP_OPENWEATHER_API_KEY,env=REACT_APP_OPENWEATHER_API_KEY \
+    --mount=type=secret,id=REACT_APP_WEATHERAPI_API_KEY,env=REACT_APP_WEATHERAPI_API_KEY
 COPY --from=production /weather-app/build /weather-app/build
 RUN npm install -g serve
 CMD ["serve", "-s", "build", "-l", "3000"]
