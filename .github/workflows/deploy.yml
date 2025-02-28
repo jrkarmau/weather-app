@@ -1,10 +1,10 @@
-name: Docker Image CI
+name: Continuous Deployment
 
 on:
   push:
-    branches: [ "main", "development" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main", "development" ]
+    branches: [ "main" ]
 
 jobs:
 
@@ -21,8 +21,8 @@ jobs:
     - name: Build the Docker image
       run: >-
         docker build .
-        --file Dockerfile.development
-        --tag ghcr.io/jrkarmau/weather-app:development
+        --file Dockerfile
+        --tag ghcr.io/jrkarmau/weather-app:latest
         --secret id=REACT_APP_OPENWEATHER_API_KEY
         --secret id=REACT_APP_WEATHERAPI_API_KEY
       env:
@@ -33,11 +33,4 @@ jobs:
       run: echo "${{ secrets.PAT_TOKEN }}" | docker login ghcr.io -u jrkarmau --password-stdin
 
     - name: Push the Docker image to GitHub Container Registry
-      run: docker push ghcr.io/jrkarmau/weather-app:development
-
-#    - name: Run Docker container
-#      run: |
-#        docker run -d -p 3000:3000 \
-#          -e REACT_APP_OPENWEATHER_API_KEY=${{ secrets.REACT_APP_OPENWEATHER_API_KEY }} \
-#          -e REACT_APP_WEATHERAPI_API_KEY=${{ secrets.REACT_APP_WEATHERAPI_API_KEY }} \
-#          ghcr.io/jrkarmau/weather-app:latest
+      run: docker push ghcr.io/jrkarmau/weather-app:latest

@@ -1,0 +1,4 @@
+# .dockerignore file for development build stages
+node_modules
+README.md
+.git*
