@@ -33,7 +33,7 @@ jobs:
       run: echo "${{ secrets.PAT_TOKEN }}" | docker login ghcr.io -u jrkarmau --password-stdin
 
     - name: Push the Docker image to GitHub Container Registry
-      run: docker push ghcr.io/jrkarmau/weather-app:latest
+      run: docker push ghcr.io/jrkarmau/weather-app:development
 
 #    - name: Run Docker container
 #      run: |
