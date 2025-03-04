@@ -8,30 +8,63 @@ on:
 
 jobs:
 
-  tests:
-
+  unit-tests:
     runs-on: ubuntu-latest
-    steps: 
-    - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Install Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '20'
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
 
-    - name: npm ci and build
-      run: |
-        npm ci
-        npm run build
+      - name: Install and Build
+        run: |
+          npm ci
+          npm run build
 
-    - name: Run unit tests
-      run: npm test
+      - name: Run unit tests
+        run: npm test
 
-    - name: Run E2E tests
-      uses: cypress-io/github-action@v6
-      with:
-        start: npm start
-        wait-on: 'http://localhost:3000'
-      env:
-        REACT_APP_OPENWEATHER_API_KEY: ${{ secrets.REACT_APP_OPENWEATHER_API_KEY }}
-        REACT_APP_WEATHERAPI_API_KEY: ${{ secrets.REACT_APP_WEATHERAPI_API_KEY }}
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: install dependencies and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Run E2E tests
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm start
+          wait-on: 'http://localhost:3000'
+        env:
+          REACT_APP_OPENWEATHER_API_KEY: ${{ secrets.REACT_APP_OPENWEATHER_API_KEY }}
+          REACT_APP_WEATHERAPI_API_KEY: ${{ secrets.REACT_APP_WEATHERAPI_API_KEY }}
+
+  SAST-scanning:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+      pull-requests: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
+
+      - name: CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
