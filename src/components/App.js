@@ -58,6 +58,7 @@ const WeatherApp = () => {
             <h1>Weather app</h1>
             <div className="input-container">
                 <input
+                    className={"search-input"}
                     type="text"
                     value={town}
                     onChange={(e) => setTown(e.target.value)}
