@@ -17,6 +17,10 @@
 1. Run unit tests: `npm test`
 2. run e2e tests: `npm run cypress`
 
+## Security
+System runs https://github.com/github/codeql-action/tree/main tool on every push to scan project for security vulnerabilities.
+And https://github.com/actions/dependency-review-action?tab=readme-ov-file on every push to do dependency review.
+
 ## How It Works
 
 The application allows users to enter a city in Finland, retrieves weather data from two different APIs, and compares the results.
