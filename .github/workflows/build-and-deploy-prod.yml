@@ -55,6 +55,12 @@ jobs:
           IMAGE_TAG=$(curl --silent "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest" | jq -r .tag_name)
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
 
+      - name: Debug Authentication
+        run: |
+          gcloud auth list
+          gcloud config list
+        
+
       - name: Apply Kubernetes deployment manifest
         env:
           GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
