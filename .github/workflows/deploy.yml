@@ -1,0 +1,36 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build the Docker image
+      run: >-
+        docker build .
+        --file Dockerfile
+        --tag ghcr.io/jrkarmau/weather-app:latest
+        --secret id=REACT_APP_OPENWEATHER_API_KEY
+        --secret id=REACT_APP_WEATHERAPI_API_KEY
+      env:
+        REACT_APP_OPENWEATHER_API_KEY: ${{ secrets.REACT_APP_OPENWEATHER_API_KEY }}
+        REACT_APP_WEATHERAPI_API_KEY: ${{ secrets.REACT_APP_WEATHERAPI_API_KEY }}
+
+    - name: Log in to GitHub Container Registry
+      run: echo "${{ secrets.PAT_TOKEN }}" | docker login ghcr.io -u jrkarmau --password-stdin
+
+    - name: Push the Docker image to GitHub Container Registry
+      run: docker push ghcr.io/jrkarmau/weather-app:latest
