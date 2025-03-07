@@ -31,10 +31,11 @@ jobs:
       run: echo "${{ secrets.PAT_TOKEN }}" | docker login ghcr.io -u jrkarmau --password-stdin
 
     - name: Push the Docker image to GitHub Container Registry
-      run: docker push ghcr.io/jrkarmau/weather-app:latest
+      run: docker push ghcr.io/jrkarmau/weather-app:${{ env.IMAGE_TAG }}
   
   deploy:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
