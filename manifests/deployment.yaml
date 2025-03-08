@@ -16,6 +16,6 @@ spec:
       - name: ghcr-token
       containers:
       - name: weather-app
-        image: ghcr.io/jrkarmau/weather-app:${IMAGE_TAG}
+        image: ghcr.io/jrkarmau/weather-app:$IMAGE_TAG
         ports:
         - containerPort: 3000
