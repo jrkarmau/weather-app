@@ -74,45 +74,45 @@ jobs:
     #      kubectl set env deployment/weather-app REACT_APP_OPENWEATHER_API_KEY=${{ secrets.REACT_APP_OPENWEATHER_API_KEY }} REACT_APP_WEATHERAPI_API_KEY=${{ secrets.REACT_APP_WEATHERAPI_API_KEY }}
     #      kubectl rollout status deployment/weather-app
 
-    deploy:
-      runs-on: ubuntu-latest
-      needs: build
-      steps:
-        # Step 1: Checkout the code
-        - name: Checkout code
-          uses: actions/checkout@v2
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        # Step 2: Set up Google Cloud SDK
-        - name: Set up Google Cloud SDK
-          uses: google-github-actions/setup-gcloud@v0.2.0
-          with:
-            project_id: ${{ secrets.GCP_PROJECT_ID }}
-            credentials: ${{ secrets.GHK_JSON_KEY }}  # Service account key JSON
+      # Step 2: Set up Google Cloud SDK
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          credentials: ${{ secrets.GHK_JSON_KEY }}  # Service account key JSON
 
-        # Step 3: Configure kubectl to use GKE cluster
-        - name: Configure kubectl
-          run: |
-            gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} \
-              --zone ${{ secrets.GKE_ZONE }} \
-              --project ${{ secrets.GKE_PROJECT_ID }}
+      # Step 3: Configure kubectl to use GKE cluster
+      - name: Configure kubectl
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} \
+            --zone ${{ secrets.GKE_ZONE }} \
+            --project ${{ secrets.GKE_PROJECT_ID }}
 
-        # Step 4: Log in to GitHub Container Registry
-        - name: Log in to GitHub Container Registry
-          run: |
-            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      # Step 4: Log in to GitHub Container Registry
+      - name: Log in to GitHub Container Registry
+        run: |
+          echo ${{ secrets.GHRC_PULL_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-        - name: Get latest release tag
-          id: release
-          run: |
-            IMAGE_TAG=$(curl --silent "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest" | jq -r .tag_name)
-            echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+      - name: Get latest release tag
+        id: release
+        run: |
+          IMAGE_TAG=$(curl --silent "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest" | jq -r .tag_name)
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
 
-        - name: Apply Kubernetes Manifest
-          run: |
-            # Replace the IMAGE_TAG placeholder in the Kubernetes manifest file with the actual image tag
-            sed "s|\$IMAGE_TAG|${{ env.IMAGE_TAG }}|g" manifests/deployment.yaml | kubectl apply -f -
+      - name: Apply Kubernetes Manifest
+        run: |
+          # Replace the IMAGE_TAG placeholder in the Kubernetes manifest file with the actual image tag
+          sed "s|\$IMAGE_TAG|${{ env.IMAGE_TAG }}|g" manifests/deployment.yaml | kubectl apply -f -
 
-        # Optional: Verify the pod is running
-        - name: Verify Pod is Running
-          run: |
-            kubectl get pods
+      # Optional: Verify the pod is running
+      - name: Verify Pod is Running
+        run: |
+          kubectl get pods
