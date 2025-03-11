@@ -80,8 +80,3 @@ jobs:
           
           # Replace placeholders in the deployment.yaml with actual values
           envsubst < manifests/deployment.yaml | kubectl apply -f -
-
-      - name: Verify Deployment
-        run: |
-          kubectl get deployments
-          kubectl get pods
