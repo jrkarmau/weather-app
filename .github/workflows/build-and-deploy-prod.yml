@@ -58,7 +58,7 @@ jobs:
       - name: Debug Authentication
         run: |
           gcloud auth list
-          gcloud projects get-iam-policy ${{ secrets.GKE_PROJECT_ID }} --flatten="bindings[].members" --format="table(bindings.role, bindings.members)" | grep deployer
+          gcloud container clusters list --project ${{ secrets.GKE_PROJECT_ID }} --zone ${{ secrets.GKE_ZONE }}
         
 
       - name: Apply Kubernetes deployment manifest
