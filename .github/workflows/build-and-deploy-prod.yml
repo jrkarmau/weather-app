@@ -68,7 +68,7 @@ jobs:
           GCP_PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
           IMAGE_TAG: ${{ env.IMAGE_TAG }}
         run: |
-          gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE --project $GCP_PROJECT_ID
+          gcloud container clusters get-credentials $GKE_CLUSTER --region $GKE_ZONE --project $GCP_PROJECT_ID
           # Use envsubst to substitute the IMAGE_TAG in the manifest before applying it
           envsubst < manifests/deployment.yaml | kubectl apply -f -
           kubectl set env deployment/weather-app REACT_APP_OPENWEATHER_API_KEY=${{ secrets.REACT_APP_OPENWEATHER_API_KEY }} REACT_APP_WEATHERAPI_API_KEY=${{ secrets.REACT_APP_WEATHERAPI_API_KEY }}
