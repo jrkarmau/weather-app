@@ -19,8 +19,8 @@ spec:
         image: ghcr.io/jrkarmau/weather-app:$IMAGE_TAG
         env:
             - name: REACT_APP_OPENWEATHER_API_KEY
-              value: "${REACT_APP_OPENWEATHER_API_KEY}"
+              value: ${REACT_APP_OPENWEATHER_API_KEY}
             - name: REACT_APP_WEATHERAPI_API_KEY
-              value: "${REACT_APP_WEATHERAPI_API_KEY}"
+              value: ${REACT_APP_WEATHERAPI_API_KEY}
         ports:
           - containerPort: 3000
