@@ -49,6 +49,12 @@ jobs:
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Install gke-gcloud-auth-plugin
+        run: |
+          curl -LO "https://github.com/googlecloudplatform/k8s-gke-auth/releases/download/v0.4.0/gke-gcloud-auth-plugin-linux-amd64"
+          chmod +x ./gke-gcloud-auth-plugin-linux-amd64
+          sudo mv ./gke-gcloud-auth-plugin-linux-amd64 /usr/local/bin/gke-gcloud-auth-plugin
+
       - name: Get latest release tag
         id: release
         run: |
